@@ -1,6 +1,39 @@
+// import{Classroom}from './classroom'
+// import {Classroom} from '../../models/classroom'
+const Sequelize = require('sequelize');
 module.exports = (app, db) => {
+  
+const Op = Sequelize.Op;
+  app.get( "/students/search/:value", (req, res) =>
+  db.student.findAll(
+
+    {
+      where: {
+        name: {
+          [Op.like]: '%'+req.params.value+'%'
+        }
+      }
+    }
+
+  ).then( (result) => res.json(result) )
+);
+app.get( "/classroom/students/:classroomId", (req, res) =>
+db.student.findAll(
+
+  {
+    where: {
+      classroomId:req.params.classroomId
+    }
+  }
+
+).then( (result) => res.json(result) )
+);
     app.get( "/students", (req, res) =>
-      db.student.findAll().then( (result) => res.json(result) )
+      db.student.findAll(
+
+        { model: module.classroom, required: true }
+
+      ).then( (result) => res.json(result) )
     );
   
     app.get( "/student/:id", (req, res) =>
@@ -19,7 +52,7 @@ module.exports = (app, db) => {
       db.student.update({
         name: req.body.name,
         surename: req.body.surename,
-        classroom_id: req.body.classroom_id,
+        classroomId: req.body.classroomId,
       },
       {
         where: {
