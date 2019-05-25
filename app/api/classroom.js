@@ -1,8 +1,12 @@
 module.exports = (app, db) => {
   console.log("class rooms");
     app.get( "/classrooms", (req, res) =>
-      db.classroom.findAll({
-    }).then( (result) => res.json(result) )
+      db.classroom.findAll(
+        {
+        include: [{
+          model: db.student,
+      }]}
+).then( (result) => res.json(result) )
     );
   
     app.get( "/classroom/:id", (req, res) =>

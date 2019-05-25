@@ -7,6 +7,19 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: DataTypes.STRING,
         surename: DataTypes.STRING,
+        classroomId: // name of the key we're adding 
+        {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'Classroom', // name of Target model
+            key: 'id', // key in Target model that we're referencing
+          },
+          // ,
+          onUpdate: 'SET NULL',
+          // onDelete: 'NO ACTION',
+          onDelete:  "CASCADE",
+          // allowNull: false
+        }
       },
       {
         freezeTableName: true,
