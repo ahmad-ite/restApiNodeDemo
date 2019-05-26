@@ -1,5 +1,26 @@
+const Sequelize = require('sequelize');
 module.exports = (app, db) => {
   console.log("class rooms");
+
+
+  const Op = Sequelize.Op;
+  app.get( "/classrooms/search/:value", (req, res) =>
+  db.classroom.findAll(
+
+    {
+      include: [{
+        model: db.student,
+    }],
+      where: {
+        name: {
+          [Op.like]: '%'+req.params.value+'%'
+        }
+      }
+    }
+
+  ).then( (result) => res.json(result) )
+);
+
     app.get( "/classrooms", (req, res) =>
       db.classroom.findAll(
         {
